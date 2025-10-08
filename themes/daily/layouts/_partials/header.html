@@ -1,2 +1,11 @@
-<h1>{{ site.Title }}</h1>
-{{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+<div class="navbar bg-base-100 sticky top-0 z-50 shadow-md mb-8">
+    <div class="navbar-start">
+        <a href="{{ site.BaseURL }}" class="btn btn-ghost text-xl">
+            <img src="/favicon.svg" alt="Logo" width="28" height="28" />
+            {{ site.Title }}
+        </a>
+    </div>
+    <div class="navbar-end">
+        {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+    </div>
+</div>

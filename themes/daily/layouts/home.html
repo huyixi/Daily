@@ -1,7 +1,27 @@
-{{ define "main" }}
-  {{ .Content }}
-  {{ range site.RegularPages }}
-    <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-    {{ .Summary }}
-  {{ end }}
+{{ define "main" }} {{ .Content }}
+<div class="space-y-12 py-8">
+    {{ $today := now.Format "2006-01-02" }} {{ range site.RegularPages }}
+    <div
+        class="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-6 border-b border-base-300 pb-8"
+    >
+        <div class="text-center">
+            <div class="text-5xl font-bold">{{ .Date.Format "02" }}</div>
+            <div class="text-xl text-base-content/70">
+                {{ .Date.Format "Jan" }}
+            </div>
+        </div>
+        <div class="prose max-w-none">
+            <h2 class="mt-0">
+                <a href="{{ .RelPermalink }}" class="link link-hover"
+                    >{{ .LinkTitle }}</a
+                >
+            </h2>
+            {{ if eq (.Date.Format "2006-01-02") $today }} {{ .Content }} {{
+            else }}
+            <p>{{ .Summary }}</p>
+            {{ end }}
+        </div>
+    </div>
+    {{ end }}
+</div>
 {{ end }}
