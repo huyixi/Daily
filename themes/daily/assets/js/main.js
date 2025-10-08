@@ -242,7 +242,7 @@ const renderArticles = (state) => {
   const page = pages[0];
 
   const wrapper = createElement("div", {
-    className: "calendar-article space-y-4",
+    className: "calendar-article flex h-full flex-col space-y-4",
   });
 
   if (page) {
@@ -308,7 +308,7 @@ const renderCalendar = (state) => {
 
   const monthDate = new Date(currentMonth.year, currentMonth.month - 1, 1);
   const calendar = createElement("div", {
-    className: "calendar space-y-4",
+    className: "calendar flex h-full flex-col space-y-4",
   });
 
   const prevTarget = addMonths(currentMonth.year, currentMonth.month, -1);
