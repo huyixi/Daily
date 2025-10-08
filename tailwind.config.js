@@ -2,7 +2,17 @@
 module.exports = {
   content: ["./themes/daily/layouts/**/*.html"],
   theme: {
-    extend: {},
+    extend: {
+      typography: ({ theme }) => ({
+        DEFAULT: {
+          css: {
+            a: {
+              "text-decoration": "none",
+            },
+          },
+        },
+      }),
+    },
   },
   plugins: [require("@tailwindcss/typography"), require("daisyui")],
   daisyui: {
