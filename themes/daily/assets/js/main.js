@@ -173,12 +173,12 @@ const renderArticleCard = (page) => {
   if (!page) return null;
   const article = createElement("article", {
     className:
-      "current-entry mx-auto w-full max-w-none space-y-6 rounded-3xl border border-base-200 bg-base-100 p-6 shadow-lg shadow-base-200/40 transition-shadow duration-200 hover:shadow-xl lg:mx-0 lg:max-w-[360px]",
+      "current-entry mx-auto flex h-full w-full max-w-none flex-col space-y-6 rounded-3xl border border-base-200 bg-base-100 p-6 shadow-lg shadow-base-200/40 transition-shadow duration-200 hover:shadow-xl lg:mx-0 lg:max-w-[360px]",
   });
 
   const header = createElement(
     "header",
-    { className: "space-y-3" },
+    { className: "space-y-3 shrink-0" },
     [
       createElement(
         "h2",
@@ -197,7 +197,7 @@ const renderArticleCard = (page) => {
 
   const body = createElement("div", {
     className:
-      "entry-body prose prose-neutral max-w-none text-base leading-relaxed text-base-content",
+      "entry-body prose prose-neutral max-w-none flex-1 text-base leading-relaxed text-base-content",
   });
   body.innerHTML = page.content || "";
 
@@ -209,10 +209,10 @@ const renderArticleCard = (page) => {
 
 const createEmptyMessage = (text = "暂无文章") =>
   createElement(
-    "p",
+    "div",
     {
       className:
-        "rounded-2xl border border-dashed border-base-300 bg-base-200/60 px-4 py-5 text-center text-sm text-neutral-600",
+        "flex h-full w-full items-center justify-center rounded-2xl border border-dashed border-base-300 bg-base-200/60 px-4 py-5 text-sm text-neutral-600",
     },
     text,
   );

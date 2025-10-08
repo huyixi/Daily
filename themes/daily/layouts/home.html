@@ -32,14 +32,14 @@
       <aside class="calendar-pane space-y-6 lg:sticky lg:top-6">
         <div data-calendar-container></div>
       </aside>
-      <section class="article-pane">
-        <div data-calendar-articles class="flex justify-center lg:justify-start">
+      <section class="article-pane flex">
+        <div data-calendar-articles class="flex h-full w-full justify-center lg:justify-start">
           {{ if $defaultDay }}
             {{ partial "calendar/day-group.html" $defaultDay }}
           {{ else }}
-            <p class="rounded-2xl border border-dashed border-base-300 bg-base-200/60 px-4 py-5 text-center text-sm text-neutral-600">
+            <div class="flex h-full w-full items-center justify-center rounded-2xl border border-dashed border-base-300 bg-base-200/60 px-4 py-5 text-sm text-neutral-600">
               暂无文章
-            </p>
+            </div>
           {{ end }}
         </div>
       </section>
