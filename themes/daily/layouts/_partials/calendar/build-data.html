@@ -1,0 +1,101 @@
+{{- $now := now -}}
+{{- $defaultYear := dateFormat "2006" $now -}}
+{{- $defaultMonth := dateFormat "01" $now -}}
+{{- $defaultKey := printf "%s-%s" $defaultYear $defaultMonth -}}
+{{- $monthlyGroups := sort (site.RegularPages.GroupByDate "2006-01") "Key" "asc" -}}
+{{- $months := slice -}}
+
+{{- range $monthlyGroups }}
+  {{- $monthParts := split .Key "-" -}}
+  {{- $year := index $monthParts 0 -}}
+  {{- $month := index $monthParts 1 -}}
+  {{- $key := printf "%s-%s" $year $month -}}
+  {{- $days := slice -}}
+  {{- range (sort (.Pages.GroupByDate "2006-01-02") "Key" "asc") }}
+    {{- $sortedPages := sort .Pages "Date" "asc" -}}
+    {{- if gt (len $sortedPages) 0 }}
+      {{- $page := index $sortedPages 0 -}}
+      {{- $dayPages := slice (dict
+        "title" $page.LinkTitle
+        "permalink" $page.RelPermalink
+        "content" (printf "%s" $page.Content)
+      ) -}}
+      {{- $days = $days | append (dict
+        "date" .Key
+        "pages" $dayPages
+      ) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $months = $months | append (dict
+    "key" $key
+    "year" $year
+    "month" $month
+    "days" $days
+  ) -}}
+{{- end -}}
+
+{{- $todayKey := dateFormat "2006-01-02" $now -}}
+
+{{- $defaultExists := gt (len (where $months "key" $defaultKey)) 0 -}}
+{{- if not $defaultExists }}
+  {{- $months = $months | append (dict
+    "key" $defaultKey
+    "year" $defaultYear
+    "month" $defaultMonth
+    "days" (slice)
+  ) -}}
+{{- end -}}
+
+{{- $months = sort $months "key" -}}
+
+{{- $minYear := "" -}}
+{{- $minMonth := "" -}}
+{{- $maxYear := "" -}}
+{{- $maxMonth := "" -}}
+{{- if gt (len $months) 0 }}
+  {{- $firstMonth := index $months 0 -}}
+  {{- $lastMonth := index $months (sub (len $months) 1) -}}
+  {{- $minYear = index $firstMonth "year" -}}
+  {{- $minMonth = index $firstMonth "month" -}}
+  {{- $maxYear = index $lastMonth "year" -}}
+  {{- $maxMonth = index $lastMonth "month" -}}
+{{- end -}}
+
+{{- $defaultDays := slice -}}
+{{- range $months }}
+  {{- if eq (index . "key") $defaultKey }}
+    {{- $defaultDays = index . "days" -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $scratch := newScratch -}}
+{{- $scratch.Set "defaultDay" nil -}}
+{{- range $defaultDays }}
+  {{- if eq (index . "date") $todayKey }}
+    {{- $scratch.Set "defaultDay" . -}}
+  {{- end }}
+{{- end -}}
+{{- if not ($scratch.Get "defaultDay") }}
+  {{- if gt (len $defaultDays) 0 }}
+    {{- $scratch.Set "defaultDay" (index $defaultDays (sub (len $defaultDays) 1)) -}}
+  {{- end }}
+{{- end -}}
+{{- $defaultDay := $scratch.Get "defaultDay" -}}
+{{- $defaultCount := 0 -}}
+{{- if $defaultDay }}
+  {{- $defaultCount = len (index $defaultDay "pages") -}}
+{{- end }}
+
+{{- return dict
+  "months" $months
+  "defaultYear" $defaultYear
+  "defaultMonth" $defaultMonth
+  "defaultKey" $defaultKey
+  "defaultDays" $defaultDays
+  "defaultDay" $defaultDay
+  "defaultCount" $defaultCount
+  "minYear" $minYear
+  "minMonth" $minMonth
+  "maxYear" $maxYear
+  "maxMonth" $maxMonth
+-}}

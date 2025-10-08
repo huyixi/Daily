@@ -1,0 +1,23 @@
+{{- $dateValue := index . "date" -}}
+{{- $pages := index . "pages" -}}
+{{- if not (and $dateValue (gt (len $pages) 0)) }}
+  {{- return -}}
+{{- end -}}
+{{- $time := time $dateValue -}}
+{{- $page := index $pages 0 -}}
+{{- if not $page }}
+  {{- return -}}
+{{- end -}}
+{{- $title := index $page "title" -}}
+{{- $content := index $page "content" -}}
+<article class="current-entry mx-auto w-full max-w-none space-y-6 rounded-3xl border border-base-200 bg-base-100 p-6 shadow-lg shadow-base-200/40 transition-shadow duration-200 hover:shadow-xl lg:mx-0 lg:max-w-[360px]">
+  <header class="space-y-3">
+    <h2 class="text-3xl font-semibold tracking-tight text-base-content md:text-4xl">
+      {{ $title }}
+    </h2>
+    <div class="h-px w-full bg-gradient-to-r from-transparent via-base-300 to-transparent"></div>
+  </header>
+  <div class="entry-body prose prose-neutral max-w-none text-base leading-relaxed text-base-content">
+    {{ $content | safeHTML }}
+  </div>
+</article>
