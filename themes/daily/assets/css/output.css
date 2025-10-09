@@ -8,10 +8,8 @@
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
     --color-red-500: oklch(63.7% 0.237 25.331);
-    --color-blue-400: oklch(70.7% 0.165 254.624);
     --color-gray-500: oklch(55.1% 0.027 264.364);
     --color-neutral-50: oklch(98.5% 0 0);
-    --color-neutral-100: oklch(97% 0 0);
     --color-neutral-200: oklch(92.2% 0 0);
     --color-neutral-300: oklch(87% 0 0);
     --color-neutral-400: oklch(70.8% 0 0);
@@ -731,8 +729,8 @@
   .h-px {
     height: 1px;
   }
-  .min-h-\[72px\] {
-    min-height: 72px;
+  .min-h-\[56px\] {
+    min-height: 56px;
   }
   .w-1\.5 {
     width: calc(var(--spacing) * 1.5);
@@ -1042,13 +1040,6 @@
       }
     }
   }
-  .hover\:bg-blue-400 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-blue-400);
-      }
-    }
-  }
   .hover\:text-neutral-700 {
     &:hover {
       @media (hover: hover) {
@@ -1144,19 +1135,19 @@
   [data-calendar] .calendar-days {
     display: grid;
     grid-template-columns: repeat(7, minmax(0, 1fr));
-    grid-auto-rows: minmax(72px, auto);
+    grid-auto-rows: minmax(56px, auto);
   }
   @media (min-width: 640px) {
     [data-calendar] .calendar-days {
-      grid-auto-rows: minmax(88px, auto);
+      grid-auto-rows: minmax(72px, auto);
     }
   }
   [data-calendar] .calendar-cell {
-    min-height: 72px;
+    min-height: 56px;
   }
   @media (min-width: 640px) {
     [data-calendar] .calendar-cell {
-      min-height: 88px;
+      min-height: 72px;
     }
   }
   [data-calendar] .calendar-nav-button {

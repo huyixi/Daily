@@ -388,7 +388,7 @@ const renderCalendar = (state) => {
         const placeholderClasses = [
           "calendar-cell",
           "relative",
-          "min-h-[72px]",
+          "min-h-[56px]",
           "bg-neutral-50",
         ];
         if (dayIndex < 6)
@@ -513,7 +513,7 @@ const renderCalendar = (state) => {
       const cellClasses = [
         "calendar-cell",
         "relative",
-        "min-h-[72px]",
+        "min-h-[56px]",
         "bg-white",
         "px-1",
       ];

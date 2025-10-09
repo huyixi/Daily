@@ -17,22 +17,22 @@
     [data-calendar] .calendar-days {
         display: grid;
         grid-template-columns: repeat(7, minmax(0, 1fr));
-        grid-auto-rows: minmax(72px, auto);
+        grid-auto-rows: minmax(56px, auto);
     }
 
     @media (min-width: 640px) {
         [data-calendar] .calendar-days {
-            grid-auto-rows: minmax(88px, auto);
+            grid-auto-rows: minmax(72px, auto);
         }
     }
 
     [data-calendar] .calendar-cell {
-        min-height: 72px;
+        min-height: 56px;
     }
 
     @media (min-width: 640px) {
         [data-calendar] .calendar-cell {
-            min-height: 88px;
+            min-height: 72px;
         }
     }
 
