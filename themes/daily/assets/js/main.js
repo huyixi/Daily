@@ -181,7 +181,7 @@ const renderArticleCard = (page) => {
   if (!page) return null;
   const article = createElement("article", {
     className:
-      "current-entry mx-auto flex h-full w-full max-w-none flex-col gap-6 rounded-2xl border border-neutral-200 bg-white p-7 shadow-sm transition-shadow duration-200 hover:shadow lg:mx-0 lg:max-w-[520px] xl:max-w-[640px]",
+      "prose current-entry mx-auto flex h-full w-full max-w-none flex-col gap-6 rounded-2xl border border-neutral-200 bg-white p-7 shadow-sm transition-shadow duration-200 hover:shadow lg:mx-0 lg:max-w-[520px] xl:max-w-[640px]",
   });
 
   const header = createElement(

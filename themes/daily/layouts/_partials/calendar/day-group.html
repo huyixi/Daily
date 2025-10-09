@@ -1,23 +1,22 @@
-{{- $dateValue := index . "date" -}}
-{{- $pages := index . "pages" -}}
-{{- if not (and $dateValue (gt (len $pages) 0)) }}
-  {{- return -}}
-{{- end -}}
-{{- $time := time $dateValue -}}
-{{- $page := index $pages 0 -}}
-{{- if not $page }}
-  {{- return -}}
-{{- end -}}
-{{- $title := index $page "title" -}}
-{{- $content := index $page "content" -}}
-<article class="current-entry mx-auto flex h-full w-full max-w-none flex-col gap-6 rounded-2xl border border-neutral-200 bg-white p-7 shadow-sm transition-shadow duration-200 hover:shadow lg:mx-0 lg:max-w-[520px] xl:max-w-[640px]">
-  <header class="space-y-2.5 shrink-0">
-    <h2 class="text-3xl font-semibold tracking-tight text-neutral-900 md:text-[34px]">
-      {{ $title }}
-    </h2>
-    <div class="h-px w-full bg-neutral-200"></div>
-  </header>
-  <div class="entry-body prose prose-neutral max-w-none flex-1 text-[15px] leading-relaxed text-neutral-700">
-    {{ $content | safeHTML }}
-  </div>
+{{- $dateValue := index . "date" -}} {{- $pages := index . "pages" -}} {{- if
+not (and $dateValue (gt (len $pages) 0)) }} {{- return -}} {{- end -}} {{- $time
+:= time $dateValue -}} {{- $page := index $pages 0 -}} {{- if not $page }} {{-
+return -}} {{- end -}} {{- $title := index $page "title" -}} {{- $content :=
+index $page "content" -}}
+<article
+    class="prose current-entry mx-auto flex h-full w-full max-w-none flex-col gap-6 rounded-2xl border border-neutral-200 bg-white p-7 shadow-sm transition-shadow duration-200 hover:shadow lg:mx-0 lg:max-w-[520px] xl:max-w-[640px]"
+>
+    <header class="space-y-2.5 shrink-0">
+        <h2
+            class="text-3xl font-semibold tracking-tight text-neutral-900 md:text-[34px]"
+        >
+            {{ $title }}
+        </h2>
+        <div class="h-px w-full bg-neutral-200"></div>
+    </header>
+    <div
+        class="entry-body prose prose-neutral max-w-none flex-1 text-[15px] leading-relaxed text-neutral-700"
+    >
+        {{ $content | safeHTML }}
+    </div>
 </article>
