@@ -3,7 +3,7 @@ name: Generate Tomorrow Entry
 on:
   schedule:
     # Runs daily at 00:01 Beijing time (16:01 UTC of the previous day)
-    - cron: '1 16 * * *'
+    - cron: "1 16 * * *"
   workflow_dispatch:
 
 permissions:
@@ -65,7 +65,7 @@ jobs:
                 with open(output_path, "a", encoding="utf-8") as fh:
                     fh.write(f"tomorrow_date={display_date}\n")
                     fh.write(f"target_file={target_file.as_posix()}\n")
-                    fh.write(f"created={'true' if created else 'false'}\n")
+                    fh.write(f"created={str(created).lower()}\n")
           PY
 
       - name: Commit and push changes
@@ -88,4 +88,4 @@ jobs:
 
       - name: Report created file
         if: steps.generate.outputs.created == 'true'
-        run: echo "Generated file: ${{ steps.generate.outputs.target_file }}"
+        run: 'echo "Generated file: ${{ steps.generate.outputs.target_file }}"'
