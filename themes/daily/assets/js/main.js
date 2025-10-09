@@ -165,7 +165,15 @@ const buildDayHref = (year, month, iso) => {
   const params = new URLSearchParams();
   params.set("y", String(year));
   params.set("m", pad(month));
-  params.set("day", iso);
+  if (typeof iso === "string") {
+    const segments = iso.split("-");
+    if (segments.length === 3) {
+      const dayNumber = Number(segments[2]);
+      if (Number.isInteger(dayNumber)) {
+        params.set("day", String(dayNumber));
+      }
+    }
+  }
   return `/?${params.toString()}`;
 };
 
@@ -625,7 +633,13 @@ const setupCalendar = (root) => {
 
   const dayParam = params.get("day");
   let activeDay = null;
-  if (
+  if (dayParam && /^\d{1,2}$/.test(dayParam)) {
+    const dayNumber = Number(dayParam);
+    const daysInMonth = new Date(currentMonth.year, currentMonth.month, 0).getDate();
+    if (dayNumber >= 1 && dayNumber <= daysInMonth) {
+      activeDay = `${currentKey}-${pad(dayNumber)}`;
+    }
+  } else if (
     dayParam &&
     /^\d{4}-\d{2}-\d{2}$/.test(dayParam) &&
     dayParam.startsWith(`${currentKey}-`)
