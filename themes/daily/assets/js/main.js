@@ -436,12 +436,6 @@ const renderCalendar = (state) => {
         "focus-visible:outline-neutral-500",
       ];
 
-      if (isActive) {
-        anchorClasses.push("");
-      } else {
-        anchorClasses.push("hover:bg-neutral-100");
-      }
-
       const dayNumberClasses = [
         "day-number",
         "flex",
