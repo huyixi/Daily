@@ -173,31 +173,30 @@ const renderArticleCard = (page) => {
   if (!page) return null;
   const article = createElement("article", {
     className:
-      "current-entry mx-auto flex h-full w-full max-w-none flex-col space-y-6 rounded-3xl border border-base-200 bg-base-100 p-6 shadow-lg shadow-base-200/40 transition-shadow duration-200 hover:shadow-xl lg:mx-0 lg:max-w-[360px]",
+      "current-entry mx-auto flex h-full w-full max-w-none flex-col gap-6 rounded-2xl border border-neutral-200 bg-white p-7 shadow-sm transition-shadow duration-200 hover:shadow lg:mx-0 lg:max-w-[360px]",
   });
 
   const header = createElement(
     "header",
-    { className: "space-y-3 shrink-0" },
+    { className: "space-y-2.5 shrink-0" },
     [
       createElement(
         "h2",
         {
           className:
-            "text-3xl font-semibold tracking-tight text-base-content md:text-4xl",
+            "text-3xl font-semibold tracking-tight text-neutral-900 md:text-[34px]",
         },
         page.title || "",
       ),
       createElement("div", {
-        className:
-          "h-px w-full bg-gradient-to-r from-transparent via-base-300 to-transparent",
+        className: "h-px w-full bg-neutral-200",
       }),
     ],
   );
 
   const body = createElement("div", {
     className:
-      "entry-body prose prose-neutral max-w-none flex-1 text-base leading-relaxed text-base-content",
+      "entry-body prose prose-neutral max-w-none flex-1 text-[15px] leading-relaxed text-neutral-700",
   });
   body.innerHTML = page.content || "";
 
@@ -212,7 +211,7 @@ const createEmptyMessage = (text = "暂无文章") =>
     "div",
     {
       className:
-        "flex h-full w-full items-center justify-center rounded-2xl border border-dashed border-base-300 bg-base-200/60 px-4 py-5 text-sm text-neutral-600",
+        "flex h-full w-full items-center justify-center rounded-xl border border-neutral-200 bg-neutral-50 px-6 py-10 text-sm text-neutral-400",
     },
     text,
   );
@@ -242,7 +241,7 @@ const renderArticles = (state) => {
   const page = pages[0];
 
   const wrapper = createElement("div", {
-    className: "calendar-article flex h-full flex-col space-y-4",
+    className: "calendar-article flex h-full flex-col gap-5",
   });
 
   if (page) {
@@ -258,7 +257,8 @@ const renderArticles = (state) => {
 };
 
 const createNavControl = (label, target, disabled, monthFormatter) => {
-  const baseClass = "btn btn-ghost btn-circle btn-sm";
+  const baseClass =
+    "calendar-nav-button inline-flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 text-lg font-medium text-neutral-500 transition-colors duration-200 hover:border-neutral-300 hover:text-neutral-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-500";
   const targetMonthDate = new Date(target.year, target.month - 1, 1);
   const ariaLabel = `${label}, ${monthFormatter.format(targetMonthDate)}`;
 
@@ -266,7 +266,7 @@ const createNavControl = (label, target, disabled, monthFormatter) => {
     return createElement(
       "span",
       {
-        className: `${baseClass} btn-disabled pointer-events-none opacity-50`,
+        className: `${baseClass} pointer-events-none opacity-40`,
         attrs: {
           "aria-disabled": "true",
           "aria-label": ariaLabel,
@@ -308,7 +308,7 @@ const renderCalendar = (state) => {
 
   const monthDate = new Date(currentMonth.year, currentMonth.month - 1, 1);
   const calendar = createElement("div", {
-    className: "calendar flex h-full flex-col space-y-4",
+    className: "calendar flex h-full flex-col gap-5",
   });
 
   const prevTarget = addMonths(currentMonth.year, currentMonth.month, -1);
@@ -321,19 +321,25 @@ const renderCalendar = (state) => {
   const header = createElement(
     "div",
     {
-      className: "calendar-header mb-4 flex items-center justify-between gap-2",
+      className: "calendar-header flex items-center justify-between",
     },
     [
-      createNavControl("‹", prevTarget, prevDisabled, formatters.month),
       createElement(
         "div",
         {
           className:
-            "text-sm font-semibold uppercase tracking-wide text-neutral-600",
+            "calendar-month text-3xl font-semibold tracking-tight text-neutral-900",
         },
         formatters.month.format(monthDate),
       ),
-      createNavControl("›", nextTarget, nextDisabled, formatters.month),
+      createElement(
+        "div",
+        { className: "calendar-navigation flex items-center gap-2" },
+        [
+          createNavControl("‹", prevTarget, prevDisabled, formatters.month),
+          createNavControl("›", nextTarget, nextDisabled, formatters.month),
+        ],
+      ),
     ],
   );
 
@@ -341,13 +347,13 @@ const renderCalendar = (state) => {
     "div",
     {
       className:
-        "calendar-weekdays overflow-hidden rounded-2xl border border-base-300 bg-base-200 text-center text-xs font-semibold uppercase",
+        "calendar-weekdays grid grid-cols-7 border-b border-neutral-200 pb-2 text-center text-xs font-semibold uppercase tracking-[0.2em]",
     },
     formatters.weekdayLabels.map((label, index) =>
       createElement(
         "span",
         {
-          className: `weekday-label py-2 text-[11px] font-semibold tracking-wide ${index === 0 || index === 6 ? "is-weekend text-neutral-400" : "text-neutral-500"}`,
+          className: `weekday-label block text-[11px] tracking-[0.18em] ${index === 0 ? "text-red-500" : index === 6 ? "text-neutral-400" : "text-neutral-500"}`,
         },
         label,
       ),
@@ -356,7 +362,7 @@ const renderCalendar = (state) => {
 
   const grid = createElement("div", {
     className:
-      "calendar-days grid grid-cols-7 overflow-hidden rounded-2xl border border-base-300 bg-base-100",
+      "calendar-days grid grid-cols-7 overflow-hidden rounded-2xl border border-neutral-200 bg-white",
   });
 
   const matrix = buildCalendarMatrix(currentMonth.year, currentMonth.month);
@@ -375,10 +381,12 @@ const renderCalendar = (state) => {
           "calendar-cell",
           "relative",
           "min-h-[72px]",
-          "bg-base-200/40",
+          "bg-neutral-50",
         ];
-        if (dayIndex < 6) placeholderClasses.push("border-r", "border-base-300");
-        if (!isLastWeek) placeholderClasses.push("border-b", "border-base-300");
+        if (dayIndex < 6)
+          placeholderClasses.push("border-r", "border-neutral-200");
+        if (!isLastWeek)
+          placeholderClasses.push("border-b", "border-neutral-200");
 
         grid.appendChild(
           createElement("div", {
@@ -399,59 +407,77 @@ const renderCalendar = (state) => {
       const ariaLabel = formatters.dayFull.format(date);
       const dayLabel = date.getDate().toString();
 
-      const marker = hasPosts
-        ? createElement("span", {
-            className: `absolute bottom-2 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full ${isActive ? "bg-primary-content" : "bg-primary"}`,
-          })
-        : null;
-
-      const isWeekend = dayIndex === 0 || dayIndex === 6;
+      const isSunday = dayIndex === 0;
+      const isSaturday = dayIndex === 6;
       const isToday = iso === todayIso;
       const anchorClasses = [
+        "group",
+        "relative",
         "flex",
         "h-full",
         "w-full",
         "flex-col",
         "items-center",
-        "justify-center",
-        "gap-1",
-        "px-1",
+        "justify-start",
+        "rounded-lg",
+        "px-2",
         "py-2",
-        "rounded-2xl",
-        "text-sm",
-        "font-medium",
-        "transition-colors",
-        "duration-150",
         "focus-visible:outline",
         "focus-visible:outline-2",
         "focus-visible:outline-offset-2",
-        "focus-visible:outline-primary",
+        "focus-visible:outline-neutral-500",
       ];
 
       if (isActive) {
-        anchorClasses.push(
-          "bg-primary",
-          "text-primary-content",
-          "shadow-inner",
-          "hover:bg-primary",
-        );
+        anchorClasses.push("bg-neutral-900/5");
       } else {
-        anchorClasses.push(
-          isWeekend ? "text-neutral-400" : "text-base-content",
-          "bg-transparent",
-          "hover:bg-base-200",
-        );
-        if (!hasPosts) anchorClasses.push("opacity-60");
+        anchorClasses.push("hover:bg-neutral-100");
       }
 
-      if (isToday && !isActive) {
-        anchorClasses.push("ring-1", "ring-base-300");
-      }
-
-      const cellContents = [
-        createElement("span", { className: "leading-none" }, dayLabel),
-        marker,
+      const dayNumberClasses = [
+        "day-number",
+        "flex",
+        "h-8",
+        "w-8",
+        "items-center",
+        "justify-center",
+        "rounded-full",
+        "text-sm",
+        "font-semibold",
+        "transition-colors",
+        "duration-150",
       ];
+
+      if (isActive) {
+        dayNumberClasses.push("bg-neutral-900", "text-white", "shadow-sm");
+      } else if (isToday) {
+        dayNumberClasses.push("border", "border-red-500", "text-red-500");
+      } else if (!withinRange) {
+        dayNumberClasses.push("text-neutral-300");
+      } else if (!hasPosts) {
+        dayNumberClasses.push("text-neutral-400");
+      } else if (isSunday) {
+        dayNumberClasses.push("text-red-500");
+      } else if (isSaturday) {
+        dayNumberClasses.push("text-neutral-500");
+      } else {
+        dayNumberClasses.push("text-neutral-700");
+      }
+
+      const dayNumber = createElement(
+        "span",
+        { className: dayNumberClasses.join(" ") },
+        dayLabel,
+      );
+
+      const marker =
+        hasPosts && withinRange
+          ? createElement("span", {
+              className: `mt-1 h-1.5 w-1.5 rounded-full ${isActive ? "bg-white" : "bg-red-500"}`,
+            })
+          : null;
+
+      const cellContents = [dayNumber, marker].filter(Boolean);
 
       const cell =
         !withinRange
@@ -483,10 +509,11 @@ const renderCalendar = (state) => {
         "calendar-cell",
         "relative",
         "min-h-[72px]",
-        "bg-base-100",
+        "bg-white",
+        "px-1",
       ];
-      if (dayIndex < 6) cellClasses.push("border-r", "border-base-300");
-      if (!isLastWeek) cellClasses.push("border-b", "border-base-300");
+      if (dayIndex < 6) cellClasses.push("border-r", "border-neutral-200");
+      if (!isLastWeek) cellClasses.push("border-b", "border-neutral-200");
 
       grid.appendChild(
         createElement(
@@ -503,6 +530,7 @@ const renderCalendar = (state) => {
   calendar.appendChild(header);
   calendar.appendChild(weekdayRow);
   calendar.appendChild(grid);
+
   host.appendChild(calendar);
 };
 
