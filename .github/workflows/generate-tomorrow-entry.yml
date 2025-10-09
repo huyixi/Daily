@@ -1,0 +1,92 @@
+name: Generate Tomorrow Entry
+
+on:
+  schedule:
+    # Runs daily at 00:01 Beijing time (16:01 UTC of the previous day)
+    - cron: '1 16 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create tomorrow's entry
+        id: generate
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python <<'PY'
+import os
+from datetime import datetime, timedelta, timezone, time
+from pathlib import Path
+
+tz = timezone(timedelta(hours=8))
+now = datetime.now(timezone.utc).astimezone(tz)
+tomorrow_date = now.date() + timedelta(days=1)
+
+display_date = tomorrow_date.strftime("%Y-%m-%d")
+year = tomorrow_date.strftime("%Y")
+month = tomorrow_date.strftime("%m")
+day = tomorrow_date.strftime("%d")
+
+target_dir = Path("content") / year / month
+target_file = target_dir / f"{day}.md"
+
+timestamp = datetime.combine(tomorrow_date, time(hour=0, minute=1), tzinfo=tz)
+iso_timestamp = timestamp.isoformat()
+
+target_dir.mkdir(parents=True, exist_ok=True)
+created = False
+
+if target_file.exists():
+    print(f"File {target_file} already exists. Skipping creation.")
+else:
+    content = (
+        f"---\n"
+        f"title: {display_date}\n"
+        f"date: {iso_timestamp}\n"
+        f"draft: false\n"
+        f"---\n"
+    )
+    target_file.write_text(content, encoding="utf-8")
+    created = True
+    print(f"Created {target_file}")
+
+output_path = os.environ.get("GITHUB_OUTPUT")
+if output_path:
+    with open(output_path, "a", encoding="utf-8") as fh:
+        fh.write(f"tomorrow_date={display_date}\n")
+        fh.write(f"target_file={target_file.as_posix()}\n")
+        fh.write(f"created={'true' if created else 'false'}\n")
+PY
+
+      - name: Commit and push changes
+        if: steps.generate.outputs.created == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if git diff --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add content
+          git commit -m "Add entry for ${{ steps.generate.outputs.tomorrow_date }}"
+          git push
+
+      - name: Report created file
+        if: steps.generate.outputs.created == 'true'
+        run: echo "Generated file: ${{ steps.generate.outputs.target_file }}"
