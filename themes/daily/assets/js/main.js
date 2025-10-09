@@ -361,7 +361,7 @@ const renderCalendar = (state) => {
       createElement(
         "span",
         {
-          className: `weekday-label block text-[11px] tracking-[0.18em] ${index === 0 ? "text-red-500" : index === 6 ? "text-neutral-400" : "text-neutral-500"}`,
+          className: `weekday-label block text-[11px] tracking-[0.18em] ${index === 6 ? "text-neutral-400" : "text-neutral-500"}`,
         },
         label,
       ),
@@ -437,7 +437,7 @@ const renderCalendar = (state) => {
       ];
 
       if (isActive) {
-        anchorClasses.push("bg-neutral-900/5");
+        anchorClasses.push("");
       } else {
         anchorClasses.push("hover:bg-neutral-100");
       }
@@ -457,15 +457,19 @@ const renderCalendar = (state) => {
       ];
 
       if (isActive) {
-        dayNumberClasses.push("bg-neutral-900", "text-white", "shadow-sm");
+        dayNumberClasses.push(
+          "text-neutral-900",
+          "border",
+          "border-red-500",
+          "text-white",
+          "bg-red-500",
+        );
       } else if (isToday) {
         dayNumberClasses.push("border", "border-red-500", "text-red-500");
       } else if (!withinRange) {
         dayNumberClasses.push("text-neutral-300");
       } else if (!hasPosts) {
         dayNumberClasses.push("text-neutral-400");
-      } else if (isSunday) {
-        dayNumberClasses.push("text-red-500");
       } else if (isSaturday) {
         dayNumberClasses.push("text-neutral-500");
       } else {
@@ -481,37 +485,36 @@ const renderCalendar = (state) => {
       const marker =
         hasPosts && withinRange
           ? createElement("span", {
-              className: `mt-1 h-1.5 w-1.5 rounded-full ${isActive ? "bg-white" : "bg-red-500"}`,
+              className: "mt-1 h-1.5 w-1.5 rounded-full bg-red-500",
             })
           : null;
 
       const cellContents = [dayNumber, marker].filter(Boolean);
 
-      const cell =
-        !withinRange
-          ? createElement(
-              "span",
-              {
-                className: `${anchorClasses.join(" ")} pointer-events-none opacity-50`,
-                attrs: {
-                  "aria-disabled": "true",
-                  "aria-label": ariaLabel,
-                },
+      const cell = !withinRange
+        ? createElement(
+            "span",
+            {
+              className: `${anchorClasses.join(" ")} pointer-events-none opacity-50`,
+              attrs: {
+                "aria-disabled": "true",
+                "aria-label": ariaLabel,
               },
-              cellContents,
-            )
-          : createElement(
-              "a",
-              {
-                className: anchorClasses.join(" "),
-                attrs: {
-                  href: buildDayHref(currentMonth.year, currentMonth.month, iso),
-                  "aria-label": ariaLabel,
-                  "aria-current": isActive ? "date" : null,
-                },
+            },
+            cellContents,
+          )
+        : createElement(
+            "a",
+            {
+              className: anchorClasses.join(" "),
+              attrs: {
+                href: buildDayHref(currentMonth.year, currentMonth.month, iso),
+                "aria-label": ariaLabel,
+                "aria-current": isActive ? "date" : null,
               },
-              cellContents,
-            );
+            },
+            cellContents,
+          );
 
       const cellClasses = [
         "calendar-cell",
@@ -635,7 +638,11 @@ const setupCalendar = (root) => {
   let activeDay = null;
   if (dayParam && /^\d{1,2}$/.test(dayParam)) {
     const dayNumber = Number(dayParam);
-    const daysInMonth = new Date(currentMonth.year, currentMonth.month, 0).getDate();
+    const daysInMonth = new Date(
+      currentMonth.year,
+      currentMonth.month,
+      0,
+    ).getDate();
     if (dayNumber >= 1 && dayNumber <= daysInMonth) {
       activeDay = `${currentKey}-${pad(dayNumber)}`;
     }
