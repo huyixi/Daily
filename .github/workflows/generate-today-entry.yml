@@ -25,52 +25,52 @@ jobs:
           set -euo pipefail
 
           python <<'PY'
-from datetime import datetime, timedelta, timezone, time
-from pathlib import Path
-import os
+          from datetime import datetime, timedelta, timezone, time
+          from pathlib import Path
+          import os
 
-tz = timezone(timedelta(hours=8))
-now = datetime.now(timezone.utc).astimezone(tz)
-today_date = now.date()
+          tz = timezone(timedelta(hours=8))
+          now = datetime.now(timezone.utc).astimezone(tz)
+          today_date = now.date()
 
-display_date = today_date.strftime("%Y-%m-%d")
-year = today_date.strftime("%Y")
-month = today_date.strftime("%m")
-day = today_date.strftime("%d")
+          display_date = today_date.strftime("%Y-%m-%d")
+          year = today_date.strftime("%Y")
+          month = today_date.strftime("%m")
+          day = today_date.strftime("%d")
 
-target_dir = Path("content") / year / month
-target_file = target_dir / f"{day}.md"
+          target_dir = Path("content") / year / month
+          target_file = target_dir / f"{day}.md"
 
-timestamp = datetime.combine(today_date, time(hour=0, minute=1), tzinfo=tz)
-iso_timestamp = timestamp.isoformat()
+          timestamp = datetime.combine(today_date, time(hour=0, minute=1), tzinfo=tz)
+          iso_timestamp = timestamp.isoformat()
 
-target_dir.mkdir(parents=True, exist_ok=True)
-created = False
+          target_dir.mkdir(parents=True, exist_ok=True)
+          created = False
 
-if target_file.exists():
-    print(f"File {target_file} already exists. Skipping creation.")
-else:
-    # 避免在 workflow 中出现裸 '---'
-    lines = [
-        "-" * 3,
-        f"title: {display_date}",
-        f"date: {iso_timestamp}",
-        "draft: false",
-        "-" * 3,
-        ""
-    ]
-    target_file.write_text("\n".join(lines), encoding="utf-8")
-    created = True
-    print(f"Created {target_file}")
+          if target_file.exists():
+              print(f"File {target_file} already exists. Skipping creation.")
+          else:
+              # Avoid bare '---' lines in workflow YAML by constructing them at runtime
+              lines = [
+                  "-" * 3,
+                  f"title: {display_date}",
+                  f"date: {iso_timestamp}",
+                  "draft: false",
+                  "-" * 3,
+                  ""
+              ]
+              target_file.write_text("\n".join(lines), encoding="utf-8")
+              created = True
+              print(f"Created {target_file}")
 
-# 通过 GITHUB_OUTPUT 暴露输出
-output_path = os.environ.get("GITHUB_OUTPUT")
-if output_path:
-    with open(output_path, "a", encoding="utf-8") as fh:
-        fh.write(f"today_date={display_date}\n")
-        fh.write(f"target_file={target_file.as_posix()}\n")
-        fh.write(f"created={str(created).lower()}\n")
-PY
+          # Expose outputs to subsequent steps
+          output_path = os.environ.get("GITHUB_OUTPUT")
+          if output_path:
+              with open(output_path, "a", encoding="utf-8") as fh:
+                  fh.write(f"today_date={display_date}\n")
+                  fh.write(f"target_file={target_file.as_posix()}\n")
+                  fh.write(f"created={str(created).lower()}\n")
+          PY
 
       - name: Commit and push changes
         if: steps.generate.outputs.created == 'true'
@@ -92,4 +92,4 @@ PY
 
       - name: Report created file
         if: steps.generate.outputs.created == 'true'
-        run: echo Generated file: ${{ steps.generate.outputs.target_file }}
+        run: echo Generated file
