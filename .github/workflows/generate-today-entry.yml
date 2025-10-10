@@ -1,4 +1,4 @@
-name: Generate Tomorrow Entry
+name: Generate Today Entry
 
 on:
   schedule:
@@ -18,7 +18,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Create tomorrow's entry
+      - name: Create today's entry
         id: generate
         shell: bash
         run: |
@@ -30,17 +30,17 @@ jobs:
 
             tz = timezone(timedelta(hours=8))
             now = datetime.now(timezone.utc).astimezone(tz)
-            tomorrow_date = now.date() + timedelta(days=1)
+            today_date = now.date()
 
-            display_date = tomorrow_date.strftime("%Y-%m-%d")
-            year = tomorrow_date.strftime("%Y")
-            month = tomorrow_date.strftime("%m")
-            day = tomorrow_date.strftime("%d")
+            display_date = today_date.strftime("%Y-%m-%d")
+            year = today_date.strftime("%Y")
+            month = today_date.strftime("%m")
+            day = today_date.strftime("%d")
 
             target_dir = Path("content") / year / month
             target_file = target_dir / f"{day}.md"
 
-            timestamp = datetime.combine(tomorrow_date, time(hour=0, minute=1), tzinfo=tz)
+            timestamp = datetime.combine(today_date, time(hour=0, minute=1), tzinfo=tz)
             iso_timestamp = timestamp.isoformat()
 
             target_dir.mkdir(parents=True, exist_ok=True)
@@ -50,11 +50,16 @@ jobs:
                 print(f"File {target_file} already exists. Skipping creation.")
             else:
                 content = (
-                    f"---\n"
-                    f"title: {display_date}\n"
-                    f"date: {iso_timestamp}\n"
-                    f"draft: false\n"
-                    f"---\n"
+                    f"---
+"
+                    f"title: {display_date}
+"
+                    f"date: {iso_timestamp}
+"
+                    f"draft: false
+"
+                    f"---
+"
                 )
                 target_file.write_text(content, encoding="utf-8")
                 created = True
@@ -63,10 +68,13 @@ jobs:
             output_path = os.environ.get("GITHUB_OUTPUT")
             if output_path:
                 with open(output_path, "a", encoding="utf-8") as fh:
-                    fh.write(f"tomorrow_date={display_date}\n")
-                    fh.write(f"target_file={target_file.as_posix()}\n")
-                    fh.write(f"created={str(created).lower()}\n")
-          PY
+                    fh.write(f"today_date={display_date}
+")
+                    fh.write(f"target_file={target_file.as_posix()}
+")
+                    fh.write(f"created={str(created).lower()}
+")
+          PY'
 
       - name: Commit and push changes
         if: steps.generate.outputs.created == 'true'
@@ -83,7 +91,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add content
-          git commit -m "Add entry for ${{ steps.generate.outputs.tomorrow_date }}"
+          git commit -m "Add entry for ${{ steps.generate.outputs.today_date }}"
           git push
 
       - name: Report created file
