@@ -181,7 +181,7 @@ const renderArticleCard = (page) => {
   if (!page) return null;
   const article = createElement("article", {
     className:
-      "prose current-entry mx-auto flex h-full w-full max-w-none flex-col gap-6 rounded-2xl border border-neutral-200 bg-white p-7 shadow-sm transition-shadow duration-200 hover:shadow lg:mx-0 lg:max-w-[520px] xl:max-w-[640px]",
+      "current-entry mx-auto flex h-full w-full max-w-none flex-col gap-6 rounded-2xl border border-neutral-200 bg-white p-7 shadow-sm transition-shadow duration-200 hover:shadow lg:mx-0 lg:max-w-[520px] xl:max-w-[640px]",
   });
 
   const header = createElement(
@@ -204,7 +204,7 @@ const renderArticleCard = (page) => {
 
   const body = createElement("div", {
     className:
-      "entry-body prose prose-neutral max-w-none flex-1 text-[15px] leading-relaxed text-neutral-700",
+      "prose entry-body max-w-none flex-1 text-[15px] leading-relaxed text-neutral-700",
   });
   body.innerHTML = page.content || "";
 
