@@ -49,18 +49,12 @@ jobs:
             if target_file.exists():
                 print(f"File {target_file} already exists. Skipping creation.")
             else:
-                content = (
-                    f"---
-"
-                    f"title: {display_date}
-"
-                    f"date: {iso_timestamp}
-"
-                    f"draft: false
-"
-                    f"---
-"
-                )
+                content = f"""---
+title: {display_date}
+date: {iso_timestamp}
+draft: false
+---
+"""
                 target_file.write_text(content, encoding="utf-8")
                 created = True
                 print(f"Created {target_file}")
@@ -68,13 +62,10 @@ jobs:
             output_path = os.environ.get("GITHUB_OUTPUT")
             if output_path:
                 with open(output_path, "a", encoding="utf-8") as fh:
-                    fh.write(f"today_date={display_date}
-")
-                    fh.write(f"target_file={target_file.as_posix()}
-")
-                    fh.write(f"created={str(created).lower()}
-")
-          PY'
+                    fh.write(f"today_date={display_date}\n")
+                    fh.write(f"target_file={target_file.as_posix()}\n")
+                    fh.write(f"created={str(created).lower()}\n")
+          PY
 
       - name: Commit and push changes
         if: steps.generate.outputs.created == 'true'
@@ -96,4 +87,4 @@ jobs:
 
       - name: Report created file
         if: steps.generate.outputs.created == 'true'
-        run: 'echo "Generated file: ${{ steps.generate.outputs.target_file }}"'
+        run: echo "Generated file: ${{ steps.generate.outputs.target_file }}"
