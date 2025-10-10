@@ -1,9 +1,13 @@
 {{ define "main" }}
-<h1 class="text-4xl font-bold mb-2">{{ .Title }}</h1>
+  <h1 class="text-4xl font-bold mb-2">{{ .Title }}</h1>
 
-{{ $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }} {{
-$dateHuman := .Date | time.Format "January 2, 2006" }}
-<time datetime="{{ $dateMachine }}" class="mb-4">{{ $dateHuman }}</time>
+  {{ $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
+  {{ $dateHuman := .Date | time.Format "January 2, 2006" }}
+  <time datetime="{{ $dateMachine }}" class="mb-4">{{ $dateHuman }}</time>
 
-{{ .Content }} {{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }} {{
-end }}
+  <div class="markdown-body">
+    {{ .Content }}
+  </div>
+
+  {{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}
+{{ end }}

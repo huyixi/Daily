@@ -204,7 +204,7 @@ const renderArticleCard = (page) => {
 
   const body = createElement("div", {
     className:
-      "prose entry-body max-w-none flex-1 text-[15px] leading-relaxed text-neutral-700",
+      "entry-body markdown-body max-w-none flex-1 text-[15px] leading-relaxed text-neutral-700",
   });
   body.innerHTML = page.content || "";
 

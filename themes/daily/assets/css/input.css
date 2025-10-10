@@ -2,7 +2,6 @@
 @plugin "daisyui" {
     themes: cupcake;
 }
-@plugin "@tailwindcss/typography";
 
 @layer components {
     [data-calendar] .calendar-weekdays {
@@ -95,7 +94,10 @@
         margin-top: 0.65rem;
     }
 
-    [data-calendar] .current-entry .entry-body li::marker {
+    [data-calendar]
+        .current-entry
+        .entry-body
+        :where(li:not(.task-list-item))::marker {
         color: hsl(var(--p));
         font-weight: 600;
     }
@@ -116,15 +118,24 @@
         padding-left: 1.15rem;
     }
 
-    [data-calendar] .current-entry .entry-body ul ul li::marker {
+    [data-calendar]
+        .current-entry
+        .entry-body
+        :where(ul ul li:not(.task-list-item))::marker {
         color: hsl(var(--p) / 0.6);
     }
 
-    [data-calendar] .current-entry .entry-body ul ul ul li::marker {
+    [data-calendar]
+        .current-entry
+        .entry-body
+        :where(ul ul ul li:not(.task-list-item))::marker {
         color: hsl(var(--bc) / 0.45);
     }
 
-    [data-calendar] .current-entry .entry-body ul li::marker {
+    [data-calendar]
+        .current-entry
+        .entry-body
+        :where(ul li:not(.task-list-item))::marker {
         font-size: 0.85rem;
     }
 

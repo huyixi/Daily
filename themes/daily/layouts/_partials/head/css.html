@@ -1,4 +1,5 @@
-{{- with resources.Get "css/output.css" }} {{- if hugo.IsDevelopment }}
+{{- $cssFiles := slice "css/output.css" "css/github-markdown-light.css" -}} {{-
+range $cssFiles }} {{- with resources.Get . }} {{- if hugo.IsDevelopment }}
 <link rel="stylesheet" href="{{ .RelPermalink }}" />
 {{- else }} {{- with . | minify | fingerprint }}
 <link
@@ -7,4 +8,4 @@
     integrity="{{ .Data.Integrity }}"
     crossorigin="anonymous"
 />
-{{- end }} {{- end }} {{- end }}
+{{- end }} {{- end }} {{- end }} {{- end }}
