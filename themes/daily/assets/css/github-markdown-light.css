@@ -327,7 +327,7 @@
 .markdown-body ol {
     margin-top: 0;
     margin-bottom: 0;
-    padding-left: 2em;
+    padding-left: 1.5em;
 }
 
 .markdown-body ol ol,
@@ -1044,6 +1044,12 @@
 }
 
 /* 只影响含复选框的任务列表项 */
+/* 只选中“含 checkbox 的 ul/ol”，移除默认缩进 */
+.markdown-body :is(ul, ol):has(> li > input[type="checkbox"]) {
+    padding-left: 0.4em; /* 去除任务列表的缩进 */
+    margin-left: 0; /* 可选，避免与主题默认缩进叠加 */
+}
+
 .markdown-body :is(ul, ol):has(> li > input[type="checkbox"]) > li {
     display: grid;
     grid-template-columns: auto 1fr; /* 左列 checkbox，右列文字 */
