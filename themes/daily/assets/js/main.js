@@ -29,7 +29,7 @@ const addMonths = (year, month, offset) => {
 
 const buildCalendarMatrix = (year, month) => {
   const firstDay = new Date(year, month - 1, 1);
-  const startOffset = firstDay.getDay(); // Sunday-first
+  const startOffset = firstDay.getDay();
   const startDate = new Date(firstDay);
   startDate.setDate(1 - startOffset);
   const matrix = [];
@@ -546,7 +546,6 @@ const setupCalendar = (root) => {
   try {
     rawMonths = JSON.parse(root.dataset.calendarData || "[]");
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error("Failed to parse calendar data", error);
     return;
   }
@@ -660,7 +659,7 @@ const setupCalendar = (root) => {
     }
   }
 
-  const weekStart = new Date(2023, 0, 1); // Sunday
+  const weekStart = new Date(2023, 0, 1);
   const weekdayFormatter = new Intl.DateTimeFormat(locale, {
     weekday: "short",
   });
