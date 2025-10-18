@@ -1332,6 +1332,11 @@
     text-wrap: wrap;
   }
 }
+@supports (text-autospace: normal) {
+  body {
+    text-autospace: normal;
+  }
+}
 @layer base {
   :root:has(input.theme-controller[value=cupcake]:checked),[data-theme=cupcake] {
     color-scheme: light;

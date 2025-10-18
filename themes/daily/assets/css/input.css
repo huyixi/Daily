@@ -190,3 +190,9 @@
         text-wrap: wrap;
     }
 }
+
+@supports (text-autospace: normal) {
+    body {
+        text-autospace: normal;
+    }
+}
